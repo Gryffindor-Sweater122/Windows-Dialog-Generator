@@ -28,7 +28,6 @@ jobs:
       # 4. Build project (Release mode, Windows executable)
       - name: Build EXE
         run: dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
-        continue-on-error: true
 
       # 5. List output files
       - name: List build output
@@ -40,3 +39,7 @@ jobs:
         with:
           name: my-csharp-exe
           path: bin/Release/net8.0/win-x64/publish/*.exe
+          
+      # 7. Run C# EXE
+      - name: Run C# EXE
+        run: dotnet ./bin/Release/net7.0/Windows-Dialog-Generator.dll
