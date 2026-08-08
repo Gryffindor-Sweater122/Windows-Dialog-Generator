@@ -1,0 +1,41 @@
+name: Build C# EXE
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest  # Required for .exe output
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Setup .NET SDK
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      # 3. Restore dependencies
+      - name: Restore dependencies
+        run: dotnet restore
+
+      # 4. Build project (Release mode, Windows executable)
+      - name: Build EXE
+        run: dotnet publish -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true
+
+      # 5. List output files
+      - name: List build output
+        run: dir .\bin\Release\net8.0\win-x64\publish\
+
+      # 6. Upload EXE as artifact
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: my-csharp-exe
+          path: bin/Release/net8.0/win-x64/publish/*.exe
