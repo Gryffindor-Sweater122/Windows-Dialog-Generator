@@ -24,6 +24,7 @@ jobs:
       # 3. Restore dependencies
       - name: Restore dependencies
         run: dotnet restore
+        continue-on-error: true
 
       # 4. Build project (Release mode, Windows executable)
       - name: Build EXE
